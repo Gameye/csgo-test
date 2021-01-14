@@ -1,0 +1,1001 @@
+cmd:
+  - +ip
+  - 0.0.0.0
+  - '-port'
+  - '${port.game}'
+  - '-tickrate'
+  - '${arg.tickRate}'
+  - +sv_setsteamaccount
+  - '${arg.steamToken}'
+  - +hostname
+  - '${arg.hostname}'
+  - +mapgroup
+  - '${arg.mapgroup}'
+  - +map
+  - '${arg.map}'
+  - '-maxplayers_override'
+  - '${arg.maxPlayers}'
+  - +tv_port
+  - '${port.gotv}'
+  - +tv_delay
+  - '${arg.gotvDelay}'
+  - +tv_maxclients
+  - '${arg.gotvMaxClients}'
+  - +sv_coaching_enabled
+  - '${arg.coachingMode}'
+  - +tv_enable
+  - '1'
+  - +sv_hibernate_when_empty
+  - '0'
+  - +game_mode
+  - '${arg.gameMode}'
+  - +game_type
+  - '${arg.gameType}'
+  - +host_workshop_map
+  - '${arg.workshopMap}'
+  - '-authkey'
+  - '${arg.authKey}'
+  - '-usercon'
+  - +rcon_password
+  - '${arg.rconPassword}'
+  - +sv_password
+  - '${arg.serverPassword}'
+  - +sv_tags
+  - hidden
+  - +sv_load_forced_client_names_file
+  - '${arg.forceClientNames}'
+  - +sv_prime_accounts_only
+  - '${arg.primeAccountsOnly}'
+files:
+  - path: csgo/motd.txt
+    content: >
+      ${arg.motd}
+  - path: csgo/match.cfg
+    content: >
+      "Match"
+      {
+        "matchid"     "example_match"
+        "num_maps"    "1" // Must be an odd number or 2. 1->Bo1, 2->Bo2, 3->Bo3, etc.
+
+        "spectators" // players allowed in spectator (e.g., admins) should go here
+        {
+          "players"
+          {
+            "${arg.spectatorOne}"   ""
+            "${arg.spectatorTwo}"   ""
+            "${arg.spectatorThree}"   ""
+            "${arg.spectatorFour}"   ""
+            "${arg.spectatorFive}"   ""
+          }
+        }
+
+        "skip_veto"   "1" // If set to 1, the maps will be preset using the first maps in the maplist below.
+        "skip_veto"   "true"
+
+        "veto_first"  "team1"  // Set to "team1" or "team2" to select who starts the veto. Any other values will default to team1 starting.
+
+        "side_type"   "${arg.sideType}"
+
+        "maplist"
+        {
+
+          "${arg.map}"    ""
+        }
+
+        "players_per_team"        "${arg.playersPerTeam}"
+        "min_players_to_ready"    "${arg.minPlayersToReady}" // Minimum # of players a team must have to ready
+        "min_spectators_to_ready" "${arg.minSpectatorsToReady}" // How many spectators must be ready to begin.
+
+        "team1"
+        {
+          "name"    "${arg.teamNameOne}" // You should always set a team name, otherwise some chat messages will not make sense. If there is no true team name, use "Team1" at least.
+          "tag"     "${arg.teamTag1}"  // Short tags replace the "clan tag" on the scoreboard. They are optional.
+          "flag"    "${arg.teamFlag1}"
+          "logo"    "${arg.teamLogo1}"
+          "players"
+          {
+            // Any of the 3 formats (steam2, steam3, steam64 profile) are acceptable.
+            // Note: the "players" section may be skipped if you set get5_check_auths to 0,
+            // but that is not recommended. You can also set player names that will be forced here.
+            // If you don't want to force player names, just use an empty quote "".
+
+            "${arg.teamOnePlayerOne}" ""
+            "${arg.teamOnePlayerTwo}" ""
+            "${arg.teamOnePlayerThree}" ""
+            "${arg.teamOnePlayerFour}" ""
+            "${arg.teamOnePlayerFive}" ""
+          }
+        }
+
+        "team2"
+        {
+          "name"    "${arg.teamNameTwo}"
+          "tag"     "${arg.teamTag2}"
+          "flag"    "${arg.teamFlag2}"
+          "logo"    "${arg.teamLogo2}"
+          "players"
+          {
+            "${arg.teamTwoPlayerOne}" ""
+            "${arg.teamTwoPlayerTwo}" ""
+            "${arg.teamTwoPlayerThree}" ""
+            "${arg.teamTwoPlayerFour}" ""
+            "${arg.teamTwoPlayerFive}" ""
+          }
+        }
+
+        // These will be executed on each map start or config load.
+        // You should not use this as a replacement for the cfg/get5/live.cfg config.
+        "cvars"
+        {
+            hostname "${arg.hostname}"
+            mp_maxrounds ${arg.maxRounds}
+            mp_halftime_duration ${arg.halftimeDuration}
+
+            get5_demo_name_format _${arg.demfilename}
+            get5_check_auths ${arg.steamIdCheck}
+        }
+      }
+  - path: csgo/cfg/sourcemod/get5.cfg
+    content: |
+      // Whether or not technical pauses are allowed
+      // -
+      // Default: "1"
+      get5_allow_technical_pause "1"
+
+      // Name of a match config file to automatically load when the server loads
+      // -
+      // Default: ""
+      get5_autoload_config ""
+
+      // Whether the get5 backup system is enabled
+      // -
+      // Default: "1"
+      get5_backup_system_enabled "1"
+
+      // If set to 0, get5 will not force players to the correct team based on steamid
+      // -
+      // Default: "1"
+      get5_check_auths "1"
+
+      // Format of the damage output string. Avaliable tags are in the default, color tags such as {LIGHT_RED} and {GREEN} also work.
+      // -
+      // Default: "--> ({DMG_TO} dmg / {HITS_TO} hits) to ({DMG_FROM} dmg / {HITS_FROM} hits) from {NAME} ({HEALTH} HP)"
+      get5_damageprint_format "--> ({DMG_TO} dmg / {HITS_TO} hits) to ({DMG_FROM} dmg / {HITS_FROM} hits) from {NAME} ({HEALTH} HP)"
+
+      // Format for demo file names, use "" to disable
+      // -
+      // Default: "{MATCHID}_map{MAPNUMBER}_{MAPNAME}"
+      get5_demo_name_format "{MATCHID}_map{MAPNUMBER}_{MAPNAME}"
+
+      // Whether to wait for map vetos to be printed to GOTV before changing map
+      // -
+      // Default: "0"
+      get5_display_gotv_veto "0"
+
+      // Whether to end the match if all players disconnect before ending. No winner is set if this happens.
+      // -
+      // Default: "0"
+      get5_end_match_on_empty_server "${arg.get5EndMatchOnEmptyServer}"
+
+      // Path to use when writing match event logs, use "" to disable
+      // -
+      // Default: ""
+      get5_event_log_format ""
+
+      // If set to non-zero, this will be the fixed length of any pause
+      // -
+      // Default: "0"
+      get5_fixed_pause_time "${arg.fixedPauseTime}"
+
+      // Template that the server hostname will follow when a match is live. Leave field blank to disable. Valid parameters are: {MAPNUMBER}, {MATCHID}, {SERVERID}, {MAPNAME}, {TIME}, {TEAM1}, {TEAM2}
+      // -
+      // Default: "Get5: {TEAM1} vs {TEAM2}"
+      get5_hostname_format "OkLetsPlay: {TEAM1} vs {TEAM2}"
+
+      // Whether or not admins with the changemap flag will be immune to kicks from "get5_kick_when_no_match_loaded". Set to "0" to disable
+      // -
+      // Default: "1"
+      get5_kick_immunity "1"
+
+      // Whether the plugin kicks new clients when no match is loaded
+      // -
+      // Default: "1"
+      get5_kick_when_no_match_loaded "${arg.get5KickWhenNoMatchLoaded}"
+
+      // Config file to exec when the game goes live
+      // -
+      // Default: "get5/live.cfg"
+      get5_live_cfg "get5/live.cfg"
+
+      // Number of seconds used to count down when a match is going live
+      // -
+      // Default: "10"
+      // Minimum: "5.000000"
+      // Maximum: "60.000000"
+      get5_live_countdown_time "10"
+
+      // Number of seconds before a backup file is automatically deleted, 0 to disable
+      // -
+      // Default: "160000"
+      get5_max_backup_age "160000"
+
+      // Maximum number of time the game can spend paused by a team, 0=unlimited
+      // -
+      // Default: "300"
+      get5_max_pause_time "${arg.maxPauseTime}"
+
+      // Maximum number of pauses a team can use, 0=unlimited
+      // -
+      // Default: "0"
+      get5_max_pauses "${arg.maxPauses}"
+
+      // The tag applied before plugin messages.
+      // -
+      // Default: "[{YELLOW}get5{NORMAL}]"
+      get5_message_prefix "[{YELLOW}OkLetsPlay{NORMAL}]"
+
+      // Whether pausing is allowed.
+      // -
+      // Default: "1"
+      get5_pausing_enabled "1"
+
+      // Whether damage reports are printed on round end.
+      // -
+      // Default: "0"
+      get5_print_damage "${arg.get5PrintDamage}"
+
+      // Whether pause limits will be reset each halftime period
+      // -
+      // Default: "1"
+      get5_reset_pauses_each_half "1"
+
+      // Integer that identifies your server. This is used in temp files to prevent collisions.
+      // -
+      // Default: "0"
+      get5_server_id "0"
+
+      // Whether to set client clan tags to player ready status.
+      // -
+      // Default: "1"
+      get5_set_client_clan_tags "1"
+
+      // Where match stats are saved (updated each map end), set to "" to disable
+      // -
+      // Default: "get5_matchstats_{MATCHID}.cfg"
+      get5_stats_path_format "get5_matchstats_{MATCHID}.cfg"
+
+      // Whether clients can use the !stop command to restore to the last round
+      // -
+      // Default: "1"
+      get5_stop_command_enabled "1"
+
+      // Time format to use when creating file names. Don't tweak this unless you know what you're doing! Avoid using spaces or colons.
+      // -
+      // Default: "%Y-%m-%d_%H"
+      get5_time_format "%Y-%m-%d_%H"
+
+      // Time (in seconds) a team has to make a !stay/!swap decision after winning knife round, 0=unlimited
+      // -
+      // Default: "60"
+      get5_time_to_make_knife_decision "180"
+
+      // Time (in seconds) teams have to ready up before forfeiting the match, 0=unlimited
+      // -
+      // Default: "0"
+      get5_time_to_start "0"
+
+      // Time (in seconds) from presenting a veto menu to a selection being made, during which a confirmation will be required, 0 to disable
+      // -
+      // Default: "2.0"
+      get5_veto_confirmation_time "2.0"
+
+      // Seconds to countdown before veto process commences. Set to "0" to disable.
+      // -
+      // Default: "5"
+      get5_veto_countdown "5"
+
+      // Config file to exec in warmup periods
+      // -
+      // Default: "get5/warmup.cfg"
+      get5_time_to_start "${arg.get5WarmupTime}"
+
+      // maximum number of pauses a team can use per half, 0=unlimited
+      // -
+      // Default: "0"
+      // get5_max_pauses_per_half "${arg.maxPausesPerHalf}"
+
+      // maximum number of time the game can spend paused by a team per half, 0=unlimited
+      // -
+      // Default: "0"
+      // get5_max_pause_time_per_half "${arg.maxPauseTimePerHalf}"
+
+  - path: csgo/cfg/get5/live.cfg
+    content: |
+      ammo_grenade_limit_default 1
+      ammo_grenade_limit_flashbang 2
+      ammo_grenade_limit_total 4
+      bot_kick
+      bot_quota 0
+      mp_afterroundmoney 0
+      mp_autokick 0
+      mp_autoteambalance 0
+      mp_backup_restore_load_autopause 0
+      mp_backup_round_auto 1
+      mp_buytime 15
+      mp_c4timer 40
+      mp_ct_default_secondary "weapon_hkp2000"
+      mp_death_drop_gun 1
+      mp_endmatch_votenextmap 0
+      mp_free_armor ${arg.freeArmor}
+      mp_freezetime ${arg.freezeTime}
+      mp_friendlyfire 1
+      mp_give_player_c4 1
+      mp_halftime_duration ${arg.halftimeDuration}
+      mp_halftime_pausetimer ${arg.halftimePauseTimer}
+      mp_ignore_round_win_conditions 0
+      mp_limitteams 0
+      mp_match_end_restart ${arg.matchEndRestart}
+      mp_maxmoney 16000
+      mp_maxrounds 30
+      mp_overtime_enable 1
+      mp_overtime_halftime_pausetimer 0
+      mp_overtime_maxrounds 6
+      mp_overtime_startmoney 12500
+      mp_respawn_on_death_ct 0
+      mp_respawn_on_death_t 0
+      mp_round_restart_delay 5
+      mp_roundtime 1.92
+      mp_roundtime_defuse 1.92
+      mp_roundtime_hostage 1.92
+      mp_solid_teammates 1
+      mp_starting_losses 1
+      mp_startmoney 800
+      mp_t_default_secondary "weapon_glock"
+      mp_timelimit 0
+      spec_freeze_deathanim_time 0
+      spec_freeze_panel_extended_time 0
+      spec_freeze_time 2
+      spec_freeze_time_lock 2
+      sv_allow_votes 0
+      sv_auto_full_alltalk_during_warmup_half_end 0
+      sv_coaching_enabled ${arg.coachingMode}
+      sv_competitive_official_5v5 1
+      sv_damage_print_enable 0
+      sv_deadtalk 1
+      sv_hibernate_postgame_delay 300
+      sv_holiday_mode 0
+      sv_talk_enemy_dead 0
+      sv_talk_enemy_living 0
+      sv_voiceenable 1
+      tv_delaymapchange 1
+      tv_relayvoice 0
+      tv_delay ${arg.gotvDelay}
+      mp_respawn_immunitytime ${arg.respawnImmunityTime}
+      mp_match_end_changelevel ${arg.matchEndChangeLevel}
+      mp_match_restart_delay ${arg.matchRestartDelay}
+      tv_snapshotrate 128
+
+script:
+  initialState: idle
+  states:
+    idle:
+      events:
+        - type: regex
+          pattern: '^exec:\s+couldn''t\s+exec\s+gamemode_\w+_server\.cfg$'
+          ignoreCase: true
+          nextState: configure
+        - type: literal
+          value: '[OkLetsPlay] Match is LIVE'
+          ignoreCase: true
+          nextState: playing
+        - type: literal
+          value: Could not establish connection to Steam servers.
+          ignoreCase: true
+          nextState: error
+        - type: regex
+          pattern: Invalid\s+Steam\s+account\s+token\s+was\s+specified
+          ignoreCase: true
+          nextState: error
+        - type: regex
+          pattern: Steam\s+account\s+token\s+has\s+expired\s+from\s+inactivity
+          ignoreCase: true
+          nextState: error
+        - type: regex
+          pattern: ^File\s+id\s+.*\s+not\s+found
+          ignoreCase: true
+          nextState: error
+        - type: literal
+          value: 'Server UGC Manager: Failed to get file info. HTTP status 401'
+          ignoreCase: true
+          nextState: error
+        - type: literal
+          value: 'map load failed: null not found or invalid'
+          ignoreCase: true
+          nextState: error
+        - type: timer
+          interval: 600000 # 10 minutes
+          nextState: quit
+    configure:
+      events:
+        - type: literal
+          value: Configure ready...
+          nextState: idle
+    playing:
+      events:
+        - type: literal
+          value: Going to intermission...
+          ignoreCase: true
+          nextState: end
+        - type: literal
+          value: Game will not start until both teams have players.
+          nextState: idle
+        - type: literal
+          value: '-> Reservation cookie 0:  reason reserved(yes), clients(no), reservationexpires(0.00)'
+          nextState: idle
+    end:
+      events:
+        - type: timer
+          interval: 100000 # 100 seconds
+          nextState: quit
+  transitions:
+    - to: configure
+      command: >
+        echo "Configure..."
+
+        log on                                          // Enable serverlogging.
+
+        bot_quota "0"                                   // Determines the totalnumber of bots in the game.
+
+        hostname "${arg.hostname}"                      // Set the server name.
+
+        sv_tags "hidden"                                // Hide server from server list
+
+        sv_server_graphic1 "${arg.graphic1}"
+
+        sv_server_graphic2 "${arg.graphic2}"
+
+        mp_logdetail 3                                  // Logs attacks.  Values are: 0=off, 1=enemy, 2=teammate, 3=both)
+
+        mp_logdetail_items 1                            // Logs a line any time a player acquires or loses an item.
+
+        mp_logmoney 1                                   // Enables money logging. Values are: 0=off, 1=on
+
+        ammo_grenade_limit_default 1
+        ammo_grenade_limit_flashbang 2
+        ammo_grenade_limit_total 4
+
+        cash_player_bomb_defused 300
+
+        cash_player_bomb_planted 300
+
+        cash_player_damage_hostage -30
+
+        cash_player_interact_with_hostage 150
+
+        cash_player_killed_enemy_default 300
+
+        cash_player_killed_enemy_factor 1
+
+        cash_player_killed_hostage -1000
+
+        cash_player_killed_teammate -300
+
+        cash_player_rescued_hostage 1000
+
+        cash_team_elimination_bomb_map 3250
+
+        cash_team_hostage_alive 150
+
+        cash_team_hostage_interaction 150
+
+        cash_team_loser_bonus 1400
+
+        cash_team_loser_bonus_consecutive_rounds 500
+
+        cash_team_planted_bomb_but_defused 800
+
+        cash_team_rescued_hostage 750
+
+        cash_team_terrorist_win_bomb 3500
+
+        cash_team_win_by_defusing_bomb 3500
+
+        cash_team_win_by_hostage_rescue 3500
+
+        cash_player_get_killed 0
+
+        cash_player_respawn_amount 0
+
+        cash_team_elimination_hostage_map_ct 2000
+
+        cash_team_elimination_hostage_map_t 1000
+
+        cash_team_win_by_time_running_out_bomb 3250
+
+        cash_team_win_by_time_running_out_hostage 3250
+
+        ff_damage_reduction_grenade 0.85                  // How much to reduce
+        damage done to teammates by a thrown grenade.  Range is from 0 - 1 (with
+        1 being damage equal to what is done to an enemy)
+
+        ff_damage_reduction_bullets 0.33                  // How much to reduce
+        damage done to teammates when shot.  Range is from 0 - 1 (with 1 being
+        damage equal to what is done to an enemy)
+
+        ff_damage_reduction_other 0.4                     // How much to reduce
+        damage done to teammates by things other than bullets and grenades.
+        Range is from 0 - 1 (with 1 being damage equal to what is done to an
+        enemy)
+
+        ff_damage_reduction_grenade_self 1                // How much to damage
+        a player does to himself with his own grenade.  Range is from 0 - 1
+        (with 1 being damage equal to what is done to an enemy)
+
+        mp_respawn_immunitytime ${arg.respawnImmunityTime}
+
+        mp_overtime_enable ${arg.overtime}                // Enable overtime
+
+        mp_afterroundmoney 0                              // amount of money
+        awared to every player after each round
+
+        mp_autokick 0                                     // Kick
+        idle/team-killing players
+
+        mp_autoteambalance 0
+
+        mp_buytime 15                                     // How many seconds
+        after round start players can buy items for.
+
+        mp_c4timer 45                                     // How long from when
+        the C4 is armed until it blows
+
+        mp_death_drop_defuser 1                           // Drop defuser on
+        player death
+
+        mp_death_drop_grenade 2                           // Which grenade to
+        drop on player death: 0=none, 1=best, 2=current or best
+
+        mp_death_drop_gun 1                               // Which gun to drop
+        on player death: 0=none, 1=best, 2=current or best
+
+        mp_defuser_allocation 0                           // How to allocate
+        defusers to CTs at start or round: 0=none, 1=random, 2=everyone
+
+        mp_do_warmup_period 1                             // Whether or not to
+        do a warmup period at the start of a match.
+
+        mp_forcecamera 1                                  // Restricts spectator
+        modes for dead players
+
+        mp_force_pick_time 160                            // The amount of time
+        a player has on the team screen to make a selection before being
+        auto-teamed
+
+        mp_free_armor ${arg.freeArmour}                   // Determines whether
+        armor and helmet are given automatically.
+
+        mp_freezetime ${arg.freezeTime}                   // How many seconds to
+        keep players frozen when the round starts
+
+        mp_friendlyfire 1                                 // Allows team members
+        to injure other members of their team
+
+        mp_halftime 1                                     // Determines whether
+        or not the match has a team-swapping halftime event.
+
+        mp_halftime_duration ${arg.halftimeDuration}      // Number of seconds
+        that halftime lasts
+
+        mp_join_grace_time 30                             // Number of seconds
+        after round start to allow a player to join a game
+
+        mp_limitteams 0                                   // Max # of players 1
+        team can have over another (0 disables check)
+
+        mp_match_can_clinch 1                             // Can a team clinch
+        and end the match by being so far ahead that the other team has no way
+        to catching up
+
+        mp_match_end_restart ${arg.matchEndRestart}       // At the end of the
+        match, perform a restart instead of loading a new map
+
+        mp_match_end_changelevel ${arg.matchEndChangeLevel} // This command sets
+        whether or not the map should perform a changelevel when the next map is
+        the same map. Default is off (0), meaning scores/etc will be reset at the
+        end of a match, and the map will not be loaded again if it is the same.
+
+        mp_maxmoney 16000                                 // maximum amount of
+        money allowed in a player's account
+
+        mp_overtime_startmoney 12500
+
+        mp_maxrounds ${arg.maxRounds}                     // max number of
+        rounds to play before server changes maps
+
+        mp_molotovusedelay 0                              // Number of seconds
+        to delay before the molotov can be used after acquiring it
+
+        mp_playercashawards 1                             // Players can earn
+        money by performing in-game actions
+
+        mp_playerid 0                                     // Controls what
+        information player see in the status bar: 0 all names; 1 team names; 2
+        no names
+
+        mp_playerid_delay 0.5                             // Number of seconds
+        to delay showing information in the status bar
+
+        mp_playerid_hold 0.25                             // Number of seconds
+        to keep showing old information in the status bar
+
+        mp_round_restart_delay ${arg.roundRestartDelay}   // Number of seconds
+        to delay before restarting a round after a win
+
+        mp_roundtime ${arg.roundTime}                     // How many minutes
+        each round takes.
+
+        mp_roundtime_defuse  ${arg.roundTime}             // How many minutes
+        each round takes on defusal maps.
+
+        mp_solid_teammates 1                              // Determines whether
+        teammates are solid or not.
+
+        mp_startmoney 800                                 // amount of money
+        each player gets when they reset
+
+        mp_spectators_max ${arg.maxSpectators}            // How many spectators
+        are allowed in a match.
+
+        mp_teamcashawards 1                               // Teams can earn
+        money by performing in-game actions
+
+        mp_timelimit 0                                    // game time per map
+        in minutes
+
+        mp_tkpunish 0                                     // Will a TK'er be
+        punished in the next round?  {0=no,  1=yes}
+
+        mp_warmuptime ${arg.warmupTime}                   // set the warmup time
+
+        mp_warmuptime_all_players_connected ${arg.warmupTimeConnected} // Warmup
+        time to use when all players have connected. 0 to disable.
+
+        mp_weapons_allow_map_placed 1                     // If this convar is
+        set, when a match starts, the game will not delete weapons placed in the
+        map.
+
+        mp_weapons_allow_zeus 1                           // Determines whether
+        the Zeus is purchasable or not.
+
+        mp_win_panel_display_time 15                      // The amount of time
+        to show the win panel between matches / halfs
+
+        mp_teamname_1 ${arg.teamNameOne}                  // Override the name
+        of team 1
+
+        mp_teamname_2 ${arg.teamNameTwo}                  // Override the name
+        of team 2
+
+        mp_teamflag_1 ${arg.teamFlag1}
+
+        mp_teamflag_2 ${arg.teamFlag2}
+
+        mp_teamlogo_1 ${arg.teamLogo1}
+
+        mp_teamlogo_2 ${arg.teamLogo2}
+
+        mp_match_restart_delay ${arg.matchRestartDelay}   // Delay in seconds
+        when the servers restarts after the match has been ended.
+
+        mp_endmatch_votenextmap 0                         // Disable map voting
+        at the end of a match.
+
+        spec_freeze_time 2.0                              // Time spend frozen
+        in observer freeze cam.
+
+        spec_freeze_panel_extended_time 0                 // Time spent with the
+        freeze panel still up after observer freeze cam is done.
+
+        spec_freeze_time_lock 2
+
+        spec_freeze_deathanim_time 0
+
+        sv_accelerate 5.5                                 // ( def. "10" )
+        client notify replicated
+
+        sv_stopspeed 80
+
+        sv_allow_votes 0                                  // disable voting
+
+        sv_vote_issue_kick_allowed 0                      // Disallow voting to
+        reset
+
+        sv_vote_issue_loadbackup_allowed 0                // Disallow voting to
+        load round backup
+
+        sv_allow_wait_command 0                           // Allow or disallow
+        the wait command on clients connected to this server.
+
+        sv_alltalk 0                                      // Players can hear
+        all other players' voice communication, no team restrictions
+
+        sv_alternateticks 0                               // If set, server only
+        simulates entities on even numbered ticks.
+
+        sv_cheats 0                                       // Allow cheats on
+        server
+
+        sv_clockcorrection_msecs 15                       // The server tries to
+        keep each player's m_nTickBase withing this many msecs of the server
+        absolute tickcount
+
+        sv_consistency 0                                  // Whether the server
+        enforces file consistency for critical files
+
+        sv_contact 0                                      // Contact email for
+        server sysop
+
+        sv_damage_print_enable 1                          // Turn this off to
+        disable the player's damage feed in the console after getting killed.
+
+        sv_dc_friends_reqd 0                              // Set this to 0 to
+        allow direct connects to a game in progress even if no presents
+
+        sv_deadtalk 0                                     // Dead players can
+        speak (voice, text) to the living
+
+        sv_forcepreload 0                                 // Force server side
+        preloading.
+
+        sv_friction 5.2                                   // World friction.
+
+        sv_full_alltalk 0                                 // Any player
+        (including Spectator team) can speak to any other player
+
+        sv_gameinstructor_disable 1                       // Force all clients
+        to disable their game instructors.
+
+        sv_ignoregrenaderadio 0                           // Turn off Fire in
+        the hole messages
+
+        sv_kick_players_with_cooldown 0                   // (0: do not kick; 1:
+        kick Untrusted players; 2: kick players with any cooldown)
+
+        sv_kick_ban_duration 0                            // How long should a
+        kick ban from the server should last (in minutes)
+
+        sv_lan 0                                          // Server is a lan
+        server ( no heartbeat, no authentication, no non-class C addresses )
+
+        sv_log_onefile 0                                  // Log server
+        information to only one file.
+
+        sv_logbans 1                                      // Log server bans in
+        the server logs.
+
+        sv_logecho 1                                      // Echo log
+        information to the console.
+
+        sv_logfile 1                                      // Log server
+        information in the log file.
+
+        sv_logflush 0                                     // Flush the log file
+        to disk on each write (slow).
+
+        sv_logsdir logfiles                               // Folder in the game
+        directory where server logs will be stored.
+
+        sv_maxrate 0                                      // min. 0.000000 max.
+        30000.000000 replicated  Max bandwidth rate allowed on server, 0 ==
+        unlimited
+
+        sv_mincmdrate 128                                 // Force client cmd
+        update rate to 128 tick
+
+        sv_minupdaterate 128                              // Force client update
+        rate to 128 tick
+
+        sv_minrate 20000                                  // Min bandwidth rate
+        allowed on server, 0 == unlimited
+
+        sv_competitive_minspec 1                          // Enable to force
+        certain client convars to minimum/maximum values to help prevent
+        competitive advantages.
+
+        sv_pausable 1                                     // Is the server
+        pausable.
+
+        sv_pure 1
+
+        sv_pure_kick_clients 1                            // If set to 1, the
+        server will kick clients with mismatching files. Otherwise, it will
+        issue a warning to the client.
+
+        sv_pure_trace 0                                   // If set to 1, the
+        server will print a message whenever a client is verifying a CR
+
+        sv_spawn_afk_bomb_drop_time 30                    // Players that spawn
+        and don't move for longer than sv_spawn_afk_bomb_drop_time (default 15
+        seconds) will automatically drop the bomb.
+
+        sv_steamgroup_exclusive 0                         // If set, only
+        members of Steam group will be able to join the server when it's empty,
+        public people will be able to join the server only if it has players.
+
+        sv_coaching_enabled ${arg.coachingMode}           // Enable coaching
+        mode.
+
+        sv_voiceenable 0                                  // Disable ingame
+        voice
+
+        /// TV Fix - 10/20/2020
+
+        tv_advertise_watchable 1                              //Enable GOTV in a empty server
+
+        tv_port ${port.gotv}                                  // Host SourceTV port
+
+        tv_allow_camera_man 1                                 //Auto director allows spectators to become camera man
+
+        tv_allow_static_shots ${arg.allowStaticShots}         //Auto director uses fixed level cameras for shots
+
+        tv_allow_camera_man_override ${arg.cameraOverride}
+
+        tv_allow_camera_man_steamid ${arg.cameraSteamid}
+
+        tv_allow_camera_man_steamid ${arg.cameraSteamid2}
+
+        tv_autorecord 1                                       //Automatically records all games as GOTV demos.
+
+        tv_chatgroupsize 0                                    //Set the default chat group size
+
+        tv_chattimelimit 8                                    //Limits spectators to chat only every n seconds
+
+        tv_debug 0                                            //GOTV debug info.
+
+        tv_delay ${arg.gotvDelay}                             //GOTV broadcast delay in seconds
+
+        tv_delaymapchange 1                                   //Delays map change until broadcast is complete
+
+        tv_deltacache 0                                       //Enable delta entity bit stream cache
+
+        tv_dispatchmode 1                                     //Dispatch clients to relay proxies: 0=never, 1=if appropriate, 2=always
+
+        tv_enable 1                                           //Activates GOTV on server.
+
+        tv_maxclients ${arg.gotvMaxClients}                   //Maximum client number on GOTV server.
+
+        tv_maxrate 0                                          //Max GOTV spectator bandwidth rate allowed, 0 == unlimited
+
+        tv_name "${arg.tvName}"                               //GOTV host name
+
+        tv_nochat 1                                           //Don't receive chat messages from other GOTV spectators
+
+        tv_overridemaster 0                                   //Overrides the GOTV master root address.
+
+        tv_relaypassword "${arg.tvRelayPassword}"             //GOTV password for relay proxies
+
+        tv_relayvoice 0                                       //Relay voice data: 0=off, 1=on
+
+        tv_snapshotrate 128                                   //Snapshots broadcasted per second
+
+        tv_timeout 60                                         //GOTV connection timeout in seconds.
+
+        tv_title "${arg.tvTitle}"                             //Set title for GOTV spectator UI
+
+        tv_transmitall 1                                      //Transmit all entities (not only director view)
+
+        sv_hibernate_postgame_delay 180
+
+        say ">OkLetsPlay 5on5 config loaded<"
+
+        echo "Configure ready..."
+
+        sm plugins list
+
+        get5_loadmatch match.cfg
+
+    - to: idle
+      command: |
+        echo "Idle..."
+    - to: playing
+      command: |
+        echo "Playing..."
+    - to: end
+      command: >
+        echo "End..."
+
+        say "The match has ended, thank you for playing!"
+
+        say "This server will shutdown in 10 seconds"
+    - to: quit
+      command: |
+        echo "Quit..."
+        quit
+    - to: error
+      command: |
+        echo "Error..."
+        quit
+defaults:
+  port.game: ''
+  port.gotv: ''
+  arg.tickRate: '128'
+  arg.steamToken: ''
+  arg.hostname: OkLetsPlay Match Server
+  arg.motd: 'OkLetsPlay Server'
+  arg.graphic: ''
+  arg.mapgroup: mg_active
+  arg.map: de_dust2
+  arg.gameMode: '1'
+  arg.gameType: ''
+  arg.overtime: ''
+  arg.maxRounds: '15'
+  arg.roundTime: '1.92'
+  arg.maxPlayers: '12'
+  arg.maxSpectators: '5'
+  arg.minSpectatorsToReady: '0'
+  arg.warmupTime: '120'
+  arg.warmupTimeConnected: '60'
+  arg.freezeTime: '20'
+  arg.halftimeDuration: '15'
+  arg.halftimePauseTimer: '0'
+  arg.roundRestartDelay: '5'
+  arg.gotvDelay: '0'
+  arg.gotvMaxClients: '10'
+  arg.graphic1: ''
+  arg.graphic2: ''
+  arg.coachingMode: '1'
+  arg.teamNameOne: ''
+  arg.teamNameTwo: ''
+  arg.teamOnePlayerOne: ''
+  arg.teamOnePlayerTwo: ''
+  arg.teamOnePlayerThree: ''
+  arg.teamOnePlayerFour: ''
+  arg.teamOnePlayerFive: ''
+  arg.teamTwoPlayerOne: ''
+  arg.teamTwoPlayerTwo: ''
+  arg.teamTwoPlayerThree: ''
+  arg.teamTwoPlayerFour: ''
+  arg.teamTwoPlayerFive: ''
+  arg.workshopMap: ''
+  arg.authKey: ''
+  arg.rconPassword: 'okletsplay'
+  arg.serverPassword: ''
+  arg.demfilename: ''
+  arg.steamIdCheck: '1'
+  arg.teamFlag1: ''
+  arg.teamFlag2: ''
+  arg.teamLogo1: ''
+  arg.teamLogo2: ''
+  arg.teamTag1: ''
+  arg.teamTag2: ''
+  arg.forceClientNames: ''
+  arg.playersPerTeam: '5'
+  arg.minPlayersToReady: '5'
+  arg.get5KickWhenNoMatchLoaded: '1'
+  arg.get5WarmupTime: '0'
+  arg.get5PrintDamage: '0'
+  arg.get5EndMatchOnEmptyServer: '1'
+  arg.sideType: 'standard'
+  arg.primeAccountsOnly: '0'
+  arg.spectatorOne: 'empty'
+  arg.spectatorTwo: 'empty'
+  arg.spectatorThree: 'empty'
+  arg.spectatorFour: 'empty'
+  arg.spectatorFive: 'empty'
+  arg.respawnImmunityTime: '0'
+  arg.allowStaticShots: '1'
+  arg.cameraOverride: '0'
+  arg.cameraSteamid: '0'
+  arg.cameraSteamid2: '0'
+  arg.maxPauses: '1'
+  arg.maxPauseTime: '300'
+  arg.fixedPauseTime: '0'
+  arg.freeArmor: '0'
+  arg.tvName: 'Gameye GOTV Stream'
+  arg.tvTitle: 'Gameye GOTV Stream'
+  arg.tvRelayPassword: 'gameyegotv'
+  arg.matchEndRestart: '1'
+  arg.matchEndChangeLevel: '0'
+  #arg.maxPausesPerHalf: '0'
+  #arg.maxPauseTimePerHalf: '0'
+  arg.matchRestartDelay: '9999'
