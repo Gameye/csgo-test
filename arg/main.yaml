@@ -1,0 +1,349 @@
+env:
+  DEM_FILENAME: '${arg.demfilename}'
+port:
+  - name: game
+    protocol: any
+  - name: gotv
+    protocol: udp
+arg:
+  - name: tickRate
+    type: number
+    defaultValue: 128
+    option:
+      - 64
+      - 128
+  - name: steamToken
+    type: string
+    defaultValue: ''
+  - name: hostname
+    type: string
+    defaultValue: OkLetsPlay Match Server
+  - name: motd
+    type: string
+    defaultValue: OkLetsPlay Server
+  - name: graphic1
+    type: string
+    defaultValue: ''
+  - name: graphic2
+    type: string
+    defaultValue: ''
+  - name: mapgroup
+    type: string
+    defaultValue: mg_active
+    validatePattern: ^\w+$
+    validateIgnoreCase: true
+  - name: map
+    type: string
+    defaultValue: de_dust2
+    validatePattern: ^\w+$
+    validateIgnoreCase: true
+  - name: gameMode
+    type: number
+    defaultValue: 1
+    option:
+      - 0
+      - 1
+      - 2
+  - name: gameType
+    type: number
+    defaultValue: 0
+    minimumValue: 0
+    maximumValue: 6
+  - name: overtime
+    type: number
+    defaultValue: 0
+    option:
+      - 0
+      - 1
+  - name: maxRounds
+    type: number
+    defaultValue: 15
+    minimumValue: 1
+    maximumValue: 30
+  - name: roundTime
+    type: number
+    defaultValue: 1.92
+    minimumValue: 1
+    maximumValue: 60
+  - name: maxPlayers
+    type: number
+    defaultValue: 12
+    minimumValue: 2
+    maximumValue: 64
+  - name: maxSpectators
+    type: number
+    defaultValue: 5
+    minimumValue: 0
+    maximumValue: 5
+  - name: warmupTime
+    type: number
+    defaultValue: 120
+    minimumValue: 1
+    maximumValue: 900
+  - name: warmupTimeConnected
+    type: number
+    defaultValue: 60
+    minimumValue: 1
+    maximumValue: 600
+  - name: freezeTime
+    type: number
+    defaultValue: 20
+    minimumValue: 1
+    maximumValue: 60
+  - name: halftimeDuration
+    type: number
+    defaultValue: 15
+    minimumValue: 0
+    maximumValue: 200
+  - name: halftimePauseTimer
+    type: number
+    defaultValue: 0
+    minimumValue: 0
+    maximumValue: 200
+  - name: roundRestartDelay
+    type: number
+    defaultValue: 5
+    minimumValue: 1
+    maximumValue: 60
+  - name: gotvDelay
+    type: number
+    defaultValue: 0
+    minimumValue: 0
+    maximum: 300
+  - name: gotvMaxClients
+    type: number
+    defaultValue: 10
+    minimumValue: 1
+    maximumValue: 128
+  - name: coachingMode
+    type: number
+    defaultValue: 1
+    option:
+      - 0
+      - 1
+  - name: teamNameOne
+    type: string
+    defaultValue: ''
+  - name: teamNameTwo
+    type: string
+    defaultValue: ''
+  - name: teamOnePlayerOne
+    type: string
+    defaultValue: ''
+  - name: teamOnePlayerTwo
+    type: string
+    defaultValue: ''
+  - name: teamOnePlayerThree
+    type: string
+    defaultValue: ''
+  - name: teamOnePlayerFour
+    type: string
+    defaultValue: ''
+  - name: teamOnePlayerFive
+    type: string
+    defaultValue: ''
+  - name: teamTwoPlayerOne
+    type: string
+    defaultValue: ''
+  - name: teamTwoPlayerTwo
+    type: string
+    defaultValue: ''
+  - name: teamTwoPlayerThree
+    type: string
+    defaultValue: ''
+  - name: teamTwoPlayerFour
+    type: string
+    defaultValue: ''
+  - name: teamTwoPlayerFive
+    type: string
+    defaultValue: ''
+  - name: teamFlag1
+    type: string
+    defaultValue: ''
+  - name: teamFlag2
+    type: string
+    defaultValue: ''
+  - name: teamLogo1
+    type: string
+    defaultValue: ''
+  - name: teamLogo2
+    type: string
+    defaultValue: ''
+  - name: teamTag1
+    type: string
+    defaultValue: ''
+  - name: teamTag2
+    type: string
+    defaultValue: ''
+  - name: workshopMap
+    type: string
+    defaultValue: ''
+  - name: authKey
+    type: string
+    defaultValue: ''
+  - name: rconPassword
+    type: string
+    defaultValue: 'okletsplay'
+  - name: serverPassword
+    type: string
+    defaultValue: ''
+  - name: demfilename
+    type: string
+    defaultValue: ''
+  - name: steamIdCheck
+    type: number
+    defaultValue: 1
+    option:
+      - 0
+      - 1
+  - name: forceClientNames
+    type: string
+    defaultValue: ''
+  - name: playersPerTeam
+    type: number
+    defaultValue: 5
+    minimumValue: 1
+    maximumValue: 6
+  - name: minPlayersToReady
+    type: number
+    defaultValue: 5
+    minimumValue: 1
+    maximumValue: 5
+  - name: minSpectatorsToReady
+    type: number
+    defaultValue: 0
+    minimumValue: 0
+    maximumValue: 5
+  - name: get5KickWhenNoMatchLoaded
+    type: number
+    defaultValue: 1
+    option:
+      - 0
+      - 1
+  - name: get5WarmupTime
+    type: number
+    defaultValue: 0
+    minimumValue: 0
+    maximumValue: 600
+  - name: get5PrintDamage
+    type: number
+    defaultValue: 0
+    option:
+      - 0
+      - 1
+  - name: get5EndMatchOnEmptyServer
+    type: number
+    defaultValue: 0
+    option:
+      - 0
+      - 1
+  - name: sideType
+    type: string
+    defaultValue: 'standard'
+  - name: primeAccountsOnly
+    type: number
+    defaultValue: 0
+    option:
+      - 0
+      - 1
+  - name: spectatorOne
+    type: string
+    defaultValue: 'empty'
+  - name: spectatorTwo
+    type: string
+    defaultValue: 'empty'
+  - name: spectatorThree
+    type: string
+    defaultValue: 'empty'
+  - name: spectatorFour
+    type: string
+    defaultValue: 'empty'
+  - name: spectatorFive
+    type: string
+    defaultValue: 'empty'
+  - name: respawnImmunityTime
+    type: number
+    defaultValue: 0
+    minimumValue: 0
+    maximumValue: 300
+  - name: allowStaticShots
+    type: number
+    defaultValue: 1
+    option:
+      - 0
+      - 1
+  - name: cameraOverride
+    type: number
+    defaultValue: 0
+    option:
+      - 0
+      - 1
+  - name: cameraSteamid
+    type: number
+    defaultValue: 0
+    option:
+      - 0
+      - 1
+  - name: cameraSteamid2
+    type: number
+    defaultValue: 0
+    option:
+      - 0
+      - 1
+  - name: maxPauses
+    type: number
+    defaultValue: 1
+    minimumValue: 1
+    maximumValue: 10
+  - name: maxPauseTime
+    type: number
+    defaultValue: 300
+    minimumValue: 0
+    maximumValue: 300
+  - name: fixedPauseTime
+    type: number
+    defaultValue: 0
+    minimumValue: 0
+    maximumValue: 300
+  - name: freeArmor
+    type: number
+    defaultValue: 0
+    option:
+      - 0
+      - 1
+      - 2
+  - name: tvName
+    type: string
+    defaultValue: 'Gameye GOTV Stream'
+  - name: tvTitle
+    type: string
+    defaultValue: 'Gameye GOTV Stream'
+  - name: tvRelayPassword
+    type: string
+    defaultValue: 'gameyegotv'
+  - name: matchEndRestart
+    type: number
+    defaultValue: 1
+    option:
+      - 0
+      - 1
+  - name: matchEndChangeLevel
+    type: number
+    defaultValue: 0
+     - 0
+     - 1
+# - name: maxPausesPerHalf
+#   type: number
+#   defaultValue: 0
+#   minimumValue: 0
+#   maximumValue: 50
+# - name: maxPauseTimePerHalf
+#   type: number
+#   defaultValue: 0
+#   minimumValue: 0
+#   maximumValue: 300
+  - name: matchRestartDelay
+    type: number
+    defaultValue: 9999
+    minimumValue: 0
+    maximumValue: 9999
