@@ -2,7 +2,7 @@ FROM ubuntu:bionic
 
 # install prerequisites for the game
 RUN dpkg --add-architecture i386
-RUN apt-get update --yes ; \
+RUN apt-get update --yes && \
     apt-get install --yes \
     libstdc++6:i386 \
     libcurl4-gnutls-dev:i386 \
@@ -11,8 +11,9 @@ RUN apt-get update --yes ; \
     libbz2-1.0:i386 \ 
     lib32gcc1 \
     gdb \
+    locales \
     curl \
-    unzip ; \
+    unzip && \
     apt-get clean
 
 # install igniter
@@ -20,6 +21,9 @@ RUN curl \
     --location --silent \
     "https://public.gameye.com/binaries/igniter-shell/v1.0.12/amd64/linux/igniter-shell.tar.gz" | \
     tar --extract --gzip --directory /usr/local/bin/
+
+RUN locale-gen en_US.UTF-8 && \
+    update-locale
 
 # add game user (steam in this case)
 RUN useradd --create-home --uid 2000 steam
@@ -49,8 +53,8 @@ RUN curl \
 RUN curl \
     --location --silent \
     "https://github.com/splewis/get5/releases/download/0.7.1/get5_0.7.1.zip" \
-    --output /tmp/get5_0.7.1.zip ; \
-    unzip /tmp/get5_0.7.1.zip -d /home/steam/csgo/csgo/ ; \
+    --output /tmp/get5_0.7.1.zip && \
+    unzip /tmp/get5_0.7.1.zip -d /home/steam/csgo/csgo/ && \
     rm /tmp/get5_0.7.1.zip
 
 # copy files and directories
