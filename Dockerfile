@@ -15,6 +15,11 @@ RUN apt-get update --yes ; \
     unzip ; \
     apt-get clean
 
+# install igniter
+RUN curl \
+    --location --silent \
+    "https://public.gameye.com/binaries/igniter-shell/v2.0.4/amd64/linux/igniter-shell.tar.gz" | \
+    tar --extract --gzip --directory /usr/local/bin/
 
 # add game user (steam in this case)
 RUN useradd --create-home --uid 2000 steam
@@ -31,12 +36,6 @@ RUN ./steamcmd.sh \
     +force_install_dir /home/steam/csgo/ \
     +app_update 740 validate \
     +quit
-
-# install igniter
-RUN curl \
-    --location --silent \
-    "https://public.gameye.com/binaries/igniter-shell/v2.0.4/amd64/linux/igniter-shell.tar.gz" | \
-    tar --extract --gzip --directory /usr/local/bin/
 
 # install some plugins
 RUN curl \
