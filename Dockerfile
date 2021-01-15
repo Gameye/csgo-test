@@ -51,7 +51,8 @@ RUN curl \
     "https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6502-linux.tar.gz" | \
     tar --extract --gzip --directory /home/steam/csgo/csgo
 RUN curl \
-    "--location --silent https://github.com/splewis/get5/releases/download/0.7.1/get5_0.7.1.zip" \
+    --location --silent \
+    "https://github.com/splewis/get5/releases/download/0.7.1/get5_0.7.1.zip" \
     --output /tmp/get5_0.7.1.zip ; \
     unzip /tmp/get5_0.7.1.zip -d /home/steam/csgo/csgo ; \
     rm /tmp/get5_0.7.1.zip
