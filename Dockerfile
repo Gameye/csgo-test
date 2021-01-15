@@ -16,14 +16,15 @@ RUN apt-get update --yes && \
     unzip && \
     apt-get clean
 
+# configure locales
+RUN locale-gen en_US.UTF-8 && \
+    update-locale
+
 # install igniter
 RUN curl \
     --location --silent \
     "https://public.gameye.com/binaries/igniter-shell/v1.0.12/amd64/linux/igniter-shell.tar.gz" | \
     tar --extract --gzip --directory /usr/local/bin/
-
-RUN locale-gen en_US.UTF-8 && \
-    update-locale
 
 # add game user (steam in this case)
 RUN useradd --create-home --uid 2000 steam
