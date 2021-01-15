@@ -25,27 +25,33 @@ WORKDIR /home/steam
 RUN curl \
     --location --silent \
     "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | \
-    tar --extract --gzip --directory /home/steam
+    tar --extract --gzip --directory /home/steam/
 RUN ./steamcmd.sh \
     +login anonymous \
-    +force_install_dir /home/steam/csgo \
+    +force_install_dir /home/steam/csgo/ \
     +app_update 740 validate \
     +quit
+
+# install igniter
+RUN curl \
+    --location --silent \
+    "https://public.gameye.com/binaries/igniter-shell/v2.0.4/amd64/linux/igniter-shell.tar.gz" | \
+    tar --extract --gzip --directory /usr/local/bin/
 
 # install some plugins
 RUN curl \
     --location --silent \
     "https://mms.alliedmods.net/mmsdrop/1.10/mmsource-1.10.7-git971-linux.tar.gz" | \
-    tar --extract --gzip --directory /home/steam/csgo/csgo
+    tar --extract --gzip --directory /home/steam/csgo/csgo/
 RUN curl \
     --location --silent \
     "https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6502-linux.tar.gz" | \
-    tar --extract --gzip --directory /home/steam/csgo/csgo
+    tar --extract --gzip --directory /home/steam/csgo/csgo/
 RUN curl \
     --location --silent \
     "https://github.com/splewis/get5/releases/download/0.7.1/get5_0.7.1.zip" \
     --output /tmp/get5_0.7.1.zip ; \
-    unzip /tmp/get5_0.7.1.zip -d /home/steam/csgo/csgo ; \
+    unzip /tmp/get5_0.7.1.zip -d /home/steam/csgo/csgo/ ; \
     rm /tmp/get5_0.7.1.zip
 
 # copy files and directories
