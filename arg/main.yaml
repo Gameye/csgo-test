@@ -17,10 +17,10 @@ arg:
     defaultValue: ''
   - name: hostname
     type: string
-    defaultValue: OkLetsPlay Match Server
+    defaultValue: Gameye Match Server
   - name: motd
     type: string
-    defaultValue: OkLetsPlay Server
+    defaultValue: Gameye Server
   - name: graphic1
     type: string
     defaultValue: ''
@@ -183,7 +183,7 @@ arg:
     defaultValue: ''
   - name: rconPassword
     type: string
-    defaultValue: 'okletsplay'
+    defaultValue: 'Gameye'
   - name: serverPassword
     type: string
     defaultValue: ''
