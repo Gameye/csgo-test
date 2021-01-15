@@ -190,7 +190,7 @@ files:
       // Template that the server hostname will follow when a match is live. Leave field blank to disable. Valid parameters are: {MAPNUMBER}, {MATCHID}, {SERVERID}, {MAPNAME}, {TIME}, {TEAM1}, {TEAM2}
       // -
       // Default: "Get5: {TEAM1} vs {TEAM2}"
-      get5_hostname_format "OkLetsPlay: {TEAM1} vs {TEAM2}"
+      get5_hostname_format "Gameye: {TEAM1} vs {TEAM2}"
 
       // Whether or not admins with the changemap flag will be immune to kicks from "get5_kick_when_no_match_loaded". Set to "0" to disable
       // -
@@ -232,7 +232,7 @@ files:
       // The tag applied before plugin messages.
       // -
       // Default: "[{YELLOW}get5{NORMAL}]"
-      get5_message_prefix "[{YELLOW}OkLetsPlay{NORMAL}]"
+      get5_message_prefix "[{YELLOW}Gameye{NORMAL}]"
 
       // Whether pausing is allowed.
       // -
@@ -385,7 +385,7 @@ script:
           ignoreCase: true
           nextState: configure
         - type: literal
-          value: '[OkLetsPlay] Match is LIVE'
+          value: '[Gameye] Match is LIVE'
           ignoreCase: true
           nextState: playing
         - type: literal
@@ -886,7 +886,7 @@ script:
 
         sv_hibernate_postgame_delay 180
 
-        say ">OkLetsPlay 5on5 config loaded<"
+        say ">Gameye 5on5 config loaded<"
 
         echo "Configure ready..."
 
@@ -920,8 +920,8 @@ defaults:
   port.gotv: ''
   arg.tickRate: '128'
   arg.steamToken: ''
-  arg.hostname: OkLetsPlay Match Server
-  arg.motd: 'OkLetsPlay Server'
+  arg.hostname: Gameye Match Server
+  arg.motd: 'Gameye Server'
   arg.graphic: ''
   arg.mapgroup: mg_active
   arg.map: de_dust2
@@ -958,7 +958,7 @@ defaults:
   arg.teamTwoPlayerFive: ''
   arg.workshopMap: ''
   arg.authKey: ''
-  arg.rconPassword: 'okletsplay'
+  arg.rconPassword: 'Gameye'
   arg.serverPassword: ''
   arg.demfilename: ''
   arg.steamIdCheck: '1'
