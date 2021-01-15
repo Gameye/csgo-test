@@ -18,7 +18,7 @@ RUN apt-get update --yes ; \
 # install igniter
 RUN curl \
     --location --silent \
-    "https://public.gameye.com/binaries/igniter-shell/v2.0.4/amd64/linux/igniter-shell.tar.gz" | \
+    "https://public.gameye.com/binaries/igniter-shell/v1.0.12/amd64/linux/igniter-shell.tar.gz" | \
     tar --extract --gzip --directory /usr/local/bin/
 
 # add game user (steam in this case)
