@@ -1,14 +1,5 @@
 FROM ubuntu:bionic
 
-# setup gameye package repository
-RUN apt-get update --yes ; \
-    apt-get install --yes curl ; \
-    curl \
-    --location --silent \
-    "https://83e1bb1bb8b64da34e724c25ed1a30286398af9824098804:@packagecloud.io/install/repositories/gameye/production/script.deb.sh" | \
-    bash ; \
-    apt-get clean
-
 # install prerequisites for the game
 RUN dpkg --add-architecture i386
 RUN apt-get update --yes ; \
@@ -20,8 +11,8 @@ RUN apt-get update --yes ; \
     libbz2-1.0:i386 \ 
     lib32gcc1 \
     gdb \
-    unzip \
-    igniter-shell ; \
+    curl \
+    unzip ; \
     apt-get clean
 
 
